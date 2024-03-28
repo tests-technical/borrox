@@ -5,7 +5,7 @@ services:
     container_name: http
     command: --api.insecure=true --providers.docker
     ports:
-      - '80:80'
+      - '8000:80'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -36,7 +36,7 @@ services:
     volumes:
       - ./back:/var/www/html
     labels:
-      - 'traefik.http.routers.backend-nginx.rule=Host(`backend.borrox.local`)'
+      - 'traefik.http.routers.backend-nginx.rule=Host(`localhost`)'
     depends_on:
       - backend-php
 
