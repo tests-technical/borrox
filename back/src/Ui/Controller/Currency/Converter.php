@@ -2,6 +2,7 @@
 
 namespace App\Ui\Controller\Currency;
 
+use App\Application\Currency\ConvertImport;
 use App\Ui\Controller\AbstractController;
 use App\Ui\Payload\Currency\ConverterRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,11 +12,23 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class Converter extends AbstractController
 {
+    public function __construct(
+        private ConvertImport $convertImport
+    ) {
+    }
+
     #[Route('/currency/converter', name: 'currency.converter', methods: Request::METHOD_POST)]
     public function __invoke(ConverterRequest $request): Response
     {
-        return new JsonResponse([
-            'message' => 'Hello, world!',
-        ]);
+        $res = $this->convertImport->__invoke(
+            $request->amount(),
+            $request->from(),
+            $request->to()
+        );
+
+        return new JsonResponse(
+            sprintf('%s %s', $res['amount'], $res['currency']),
+            Response::HTTP_OK
+        );
     }
 }
