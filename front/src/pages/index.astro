@@ -58,7 +58,6 @@
         <div class="flex justify-center">
           <button
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
           >
             Convertir
           </button>
@@ -72,7 +71,7 @@
   const $form = document.querySelector('form');
   $form?.addEventListener('submit', (e) => {
     e.preventDefault();
-    
+
     const $monto = document.querySelector('#monto') as HTMLInputElement;
     const $moneda_origen = document.querySelector(
       '#moneda_origen'
@@ -85,7 +84,7 @@
     const moneda_origen = $moneda_origen.value;
     const moneda_destino = $moneda_destino.value;
 
-    const URL = `http://backend.borrox.local/currency/converter`;
+    const URL = `http://localhost:8000/currency/converter`;
 
     fetch(URL, {
       method: 'POST',
