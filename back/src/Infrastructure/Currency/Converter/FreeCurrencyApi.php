@@ -10,9 +10,7 @@ final class FreeCurrencyApi implements IConverter
     public function convert(int $amount, string $from, string $to): array
     {
         $client = new Client([
-            // Base URI is used with relative requests
             'base_uri' => 'https://api.freecurrencyapi.com',
-            // You can set any number of default request options.
             'timeout'  => 2.0,
         ]);
 
