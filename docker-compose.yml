@@ -1,12 +1,11 @@
-version: "3.8"
+version: '3.8'
 services:
-
   http:
     image: traefik:v2.9
     container_name: http
     command: --api.insecure=true --providers.docker
     ports:
-      - "80:80"
+      - '80:80'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -18,7 +17,7 @@ services:
     volumes:
       - ./db:/var/lib/mysql
     ports:
-      - "4001:3306"
+      - '4001:3306'
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: platform
@@ -37,12 +36,14 @@ services:
     volumes:
       - ./back:/var/www/html
     labels:
-      - "traefik.http.routers.backend-nginx.rule=Host(`backend.borrox.local`)"
+      - 'traefik.http.routers.backend-nginx.rule=Host(`backend.borrox.local`)'
     depends_on:
       - backend-php
 
   backend-php:
-    image: jonacruz/php-fpm:8.2
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: backend-php
     restart: always
     tty: true
