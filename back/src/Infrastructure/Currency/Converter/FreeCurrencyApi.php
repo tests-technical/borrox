@@ -3,12 +3,28 @@
 namespace App\Infrastructure\Currency\Converter;
 
 use App\Core\Currency\IConverter;
+use GuzzleHttp\Client;
 
 final class FreeCurrencyApi implements IConverter
 {
     public function convert(int $amount, string $from, string $to): array
     {
-        $convertedAmount = 123;
+        $client = new Client([
+            // Base URI is used with relative requests
+            'base_uri' => 'https://api.freecurrencyapi.com',
+            // You can set any number of default request options.
+            'timeout'  => 2.0,
+        ]);
+
+        $response = $client->request('GET', '/v1/latest?apikey=fca_live_cekBMaihwxwwDychGV0DeAqUmkJ5peRs1kf5vXmU');
+        $body = json_decode($response->getBody()->getContents(), true);
+        $data = $body['data'];
+
+        if (!isset($data[$from]) || !isset($data[$to])) {
+            throw new \Exception('Currency not found');
+        }
+
+        $convertedAmount = $amount * $data[$to] / $data[$from];
 
         return [
             'amount' => $convertedAmount,
