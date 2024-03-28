@@ -27,7 +27,9 @@ class Converter extends AbstractController
         );
 
         return new JsonResponse(
-            sprintf('%s %s', $res['amount'], $res['currency']),
+            [
+                'result' => sprintf('%s %s', $res['amount'], $res['currency'])
+            ],
             Response::HTTP_OK
         );
     }

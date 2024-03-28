@@ -3,14 +3,106 @@
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body class="bg-gray-900 min-h-screen flex justify-center items-center">
+    <div class="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 text-white">
+      <h2 class="text-2xl mb-4 text-center">Conversor de Moneda</h2>
+      <form class="text-center">
+        <div class="mb-4">
+          <label class="block text-gray-300 text-sm font-bold mb-2" for="monto"
+            >Monto:</label
+          >
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+            id="monto"
+            type="text"
+            placeholder="Ingrese el monto"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            class="block text-gray-300 text-sm font-bold mb-2"
+            for="moneda_origen">Moneda de Origen:</label
+          >
+          <select
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+            id="moneda_origen"
+          >
+            <option>USD</option>
+            <option>EUR</option>
+            <option>GBP</option>
+            <option>JPY</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label
+            class="block text-gray-300 text-sm font-bold mb-2"
+            for="moneda_destino">Moneda de Destino:</label
+          >
+          <select
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+            id="moneda_destino"
+          >
+            <option>USD</option>
+            <option>EUR</option>
+            <option>GBP</option>
+            <option>JPY</option>
+          </select>
+        </div>
+        <div class="flex justify-center">
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+          >
+            Convertir
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
 </html>
+
+<script>
+  const $button = document.querySelector('button');
+  $button?.addEventListener('click', () => {
+    const $monto = document.querySelector('#monto') as HTMLInputElement;
+    const $moneda_origen = document.querySelector(
+      '#moneda_origen'
+    ) as HTMLSelectElement;
+    const $moneda_destino = document.querySelector(
+      '#moneda_destino'
+    ) as HTMLSelectElement;
+
+    const monto = $monto.value;
+    const moneda_origen = $moneda_origen.value;
+    const moneda_destino = $moneda_destino.value;
+
+    const URL = `http://backend.borrox.local/currency/converter`;
+
+    fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        amount: monto,
+        from: moneda_origen,
+        to: moneda_destino
+      })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+		console.log(data)
+        alert(`el resultado es ${data.result}`);
+      })
+      .catch((error) => {
+        alert('Ocurrió un error');
+      });
+  });
+</script>
