@@ -83,22 +83,18 @@
     const moneda_origen = $moneda_origen.value;
     const moneda_destino = $moneda_destino.value;
 
-    const URL = `https://borrox-api.yalad.co/currency/converter`;
+    const URL = `http://backend.borrox.local/currency/converter`;
 
     fetch(URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify({
-        amount: monto,
+        amount: Number(monto),
         from: moneda_origen,
         to: moneda_destino
       })
     })
       .then((response) => response.json())
       .then((data) => {
-		console.log(data)
         alert(`el resultado es ${data.result}`);
       })
       .catch((error) => {
