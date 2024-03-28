@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+
+  http:
+    image: traefik:v2.9
+    container_name: http
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  mysql:
+    image: jonacruz/mysql:8.0.23
+    container_name: mysql
+    restart: always
+    tty: true
+    volumes:
+      - ./db:/var/lib/mysql
+    ports:
+      - "4001:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: platform
+      MYSQL_PASSWORD: platform
+    entrypoint: sh -c " echo \"CREATE DATABASE IF NOT EXISTS platform; CREATE DATABASE IF NOT EXISTS platform_test; GRANT ALL PRIVILEGES ON *.* TO 'platform'@'%';\" > /docker-entrypoint-initdb.d/init.sql; /usr/local/bin/docker-entrypoint.sh --sql_mode="" --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci "
+
+  # Backend
+
+  backend-nginx:
+    image: jonacruz/nginx
+    container_name: backend-nginx
+    restart: always
+    tty: true
+    environment:
+      APP_FASTCGI_PASS: 'backend-php:9000'
+    volumes:
+      - ./back:/var/www/html
+    labels:
+      - "traefik.http.routers.backend-nginx.rule=Host(`backend.borrox.local`)"
+    depends_on:
+      - backend-php
+
+  backend-php:
+    image: jonacruz/php-fpm:8.2
+    container_name: backend-php
+    restart: always
+    tty: true
+    volumes:
+      - ./back:/var/www/html
+    depends_on:
+      - mysql
