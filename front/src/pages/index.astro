@@ -69,8 +69,10 @@
 </html>
 
 <script>
-  const $button = document.querySelector('button');
-  $button?.addEventListener('click', () => {
+  const $form = document.querySelector('form');
+  $form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
     const $monto = document.querySelector('#monto') as HTMLInputElement;
     const $moneda_origen = document.querySelector(
       '#moneda_origen'
