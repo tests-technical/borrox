@@ -64,10 +64,24 @@
         </div>
       </form>
     </div>
+
+    <div class="fixed top-4 right-4">
+      <button
+        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        id="logout"
+      >
+        Cerrar Sesión
+      </button>
+    </div>
   </body>
 </html>
 
 <script>
+  const accessToken = localStorage.getItem('accessToken');
+  if (!accessToken) {
+    window.location.href = '/login';
+  }
+
   const $form = document.querySelector('form');
   $form?.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -84,10 +98,14 @@
     const moneda_origen = $moneda_origen.value;
     const moneda_destino = $moneda_destino.value;
 
-    const URL = `http://localhost:8000/currency/converter`;
+    const URL = `http://localhost:8000/api/currency/converter`;
 
     fetch(URL, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      },
       body: JSON.stringify({
         amount: Number(monto),
         from: moneda_origen,
@@ -101,5 +119,11 @@
       .catch((error) => {
         alert('Ocurrió un error');
       });
+  });
+
+  const $logout = document.querySelector('#logout');
+  $logout?.addEventListener('click', () => {
+    localStorage.removeItem('accessToken');
+    window.location.href = '/login';
   });
 </script>
