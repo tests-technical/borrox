@@ -17,7 +17,7 @@ class Converter extends AbstractController
     ) {
     }
 
-    #[Route('/currency/converter', name: 'currency.converter', methods: Request::METHOD_POST)]
+    #[Route('/api/currency/converter', name: 'currency.converter', methods: Request::METHOD_POST)]
     public function __invoke(ConverterRequest $request): Response
     {
         $res = $this->convertImport->__invoke(

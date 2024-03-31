@@ -14,6 +14,8 @@ npm start
 
 ```bash
 make dev.backend
+php bin/console lexik:jwt:generate-keypair
+php bin/console doctrine:migrations:migrate
 ```
 
 `http://localhost:8000/`
