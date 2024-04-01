@@ -20,3 +20,36 @@ php bin/console doctrine:migrations:migrate
 ```
 
 `http://localhost:8000/`
+
+# API
+
+## Registro de usuario
+
+```bash
+POST: http://localhost:8000/api/registration
+{
+    "email": "example@gmail.com",
+    "password": "123456"
+}
+```
+
+## Login de usuario
+
+```bash
+POST: http://localhost:8000/api/login
+{
+    "email": "example@gmail.com",
+    "password": "123456"
+}
+```
+
+## Convertir moneda
+
+```bash
+POST: http://localhost:8000/api/currency/converter
+{
+    "amount": 100,
+    "from": "USD",
+    "to": "EUR"
+}
+```
